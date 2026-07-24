@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Browse Event Schedule</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Teko:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="page-glow" aria-hidden="true"></div>
+    <main class="layout">
+        <header class="hero">
+            <p class="eyebrow">Browse Event Schedule</p>
+            <h1>Schedule of Events</h1>
+            <p id="last-updated" class="muted">Loading events...</p>
+        </header>
+
+        <section class="controls" aria-label="Schedule filters">
+            <label>
+                Day
+                <select id="day-filter"></select>
+            </label>
+            <label>
+                Type
+                <select id="type-filter"></select>
+            </label>
+            <label>
+                Room
+                <select id="room-filter"></select>
+            </label>
+            <label>
+                Search
+                <input id="search-filter" type="search" placeholder="Event, game system, host">
+            </label>
+            <label class="checkbox-row">
+                <input id="hide-full" type="checkbox">
+                Hide Full Events
+            </label>
+        </section>
+
+        <section class="board-wrap" aria-live="polite">
+            <div class="board-head">
+                <div class="board-head-left">
+                    <h2 id="view-title">View</h2>
+                    <div class="view-toggle" role="tablist" aria-label="Schedule view">
+                        <button id="timeline-view-btn" class="view-btn active" type="button" data-view="timeline"
+                            role="tab" aria-selected="true">Cards</button>
+                        <button id="calendar-view-btn" class="view-btn" type="button" data-view="calendar" role="tab"
+                            aria-selected="false">Calendar</button>
+                    </div>
+                </div>
+                <p id="results-label" class="muted"></p>
+            </div>
+            <div id="schedule-board" class="schedule-board"></div>
+        </section>
+    </main>
+
+    <template id="event-card-template">
+        <article class="event-card">
+            <div class="event-top">
+                <h3 class="event-name"></h3>
+                <span class="seat-pill"></span>
+            </div>
+            <p class="event-system"></p>
+            <p class="event-meta"></p>
+            <p class="event-location"></p>
+        </article>
+    </template>
+
+    <script src="app.js?v=20260724-4" defer></script>
+</body>
+
+</html>
