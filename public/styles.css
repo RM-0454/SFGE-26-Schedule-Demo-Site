@@ -32,6 +32,34 @@ body {
     display: none;
 }
 
+.demo-banner {
+    width: 100%;
+    background: #7f1d1d;
+    border-bottom: 1px solid #b91c1c;
+    color: #fee2e2;
+    padding: 0.55rem 0.9rem;
+}
+
+.demo-banner p {
+    margin: 0;
+    width: min(1200px, 100%);
+    margin-inline: auto;
+    font-size: 0.84rem;
+    line-height: 1.35;
+    font-weight: 600;
+}
+
+.demo-banner a {
+    color: #fecaca;
+    font-weight: 700;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+}
+
+.demo-banner a:hover {
+    color: #ffffff;
+}
+
 .layout {
     width: min(1200px, 100% - 1.5rem);
     margin: 1rem auto 2rem;
@@ -601,5 +629,13 @@ input[type="search"]:focus {
 
     .controls {
         grid-template-columns: 1fr;
+    }
+
+    .demo-banner {
+        padding: 0.62rem 0.7rem;
+    }
+
+    .demo-banner p {
+        font-size: 0.8rem;
     }
 }
