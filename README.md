@@ -24,12 +24,18 @@ The changes I am proposing largely center around how information is presented to
 
 ### Card View
 
+![Card view screenshot](images/card_view_vs_table.png)
+
 The current website is a table of events ordered chronologically. In this demo, each event is presented as a card, which creates clearer visual separation and makes the schedule easier to scan. Organizing the cards by day and start time helps attendees quickly understand their options.
 
 - Events are grouped by day and start time instead of blending into a long list
+- Cards require less vertical space than table
 - Filters stay aligned with the planning task: day, type, room, and search
 
 ### Calendar View
+
+![Calendar view screenshot](images/calendar_view.png)
+
 In addition to the card view, users can toggle a horizontal calendar view.
 
 - The calendar view makes overlaps and conflicts obvious 
