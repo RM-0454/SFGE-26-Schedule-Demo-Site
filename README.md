@@ -1,8 +1,11 @@
 # SFGE Schedule Layout Demo
 
+### https://rm-0454.github.io/SFGE-26-Schedule-Demo-Site/
+
+
 NOTE: This was build as a short-term demo for the 2026 SFGE, this repo will likely break soon after the convention closes
 
-## Why this site exists
+## Why this demo exists
 
 I am a tech-savvy first-timer at Southern-Fried Gaming Expo (SFGE). I built this demo to show what I believe is a more usable schedule experience than the current layout at https://tabletop.gameatl.com/account/convention-events.php. 
 
