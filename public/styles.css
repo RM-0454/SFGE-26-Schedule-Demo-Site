@@ -232,8 +232,10 @@ input[type="search"]:focus {
 
 .schedule-board.calendar-mode {
     padding: 0.9rem;
-    overflow-x: auto;
-    overflow-y: visible;
+    overflow: auto;
+    max-height: var(--calendar-max-height, 60dvh);
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable both-edges;
 }
 
 .calendar-horizontal {
@@ -258,6 +260,7 @@ input[type="search"]:focus {
     align-items: start;
     z-index: 60;
     background: var(--surface);
+    box-shadow: 0 1px 0 var(--line-soft);
 }
 
 .calendar-day-row {

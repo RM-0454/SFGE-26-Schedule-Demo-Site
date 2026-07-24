@@ -66,6 +66,10 @@ function bindControlEvents() {
 			renderScheduleView(state.filteredEvents);
 		});
 	});
+
+	window.addEventListener("resize", () => {
+		syncCalendarViewportHeight();
+	});
 }
 
 async function loadSchedule() {
@@ -208,6 +212,7 @@ function updateViewToggle() {
 
 function renderTimeline(events) {
 	scheduleBoardEl.classList.remove("calendar-mode");
+	scheduleBoardEl.style.removeProperty("--calendar-max-height");
 	scheduleBoardEl.innerHTML = "";
 	resultsLabelEl.textContent = `${events.length} event${events.length === 1 ? "" : "s"}`;
 
@@ -365,6 +370,24 @@ function renderCalendar(events) {
 	});
 
 	scheduleBoardEl.append(calendar);
+	syncCalendarViewportHeight();
+	requestAnimationFrame(() => {
+		syncCalendarViewportHeight();
+	});
+}
+
+function syncCalendarViewportHeight() {
+	if (state.viewMode !== "calendar" || !scheduleBoardEl.classList.contains("calendar-mode")) {
+		scheduleBoardEl.style.removeProperty("--calendar-max-height");
+		return;
+	}
+
+	const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+	const boardTop = scheduleBoardEl.getBoundingClientRect().top;
+	const viewportBottomGap = 16;
+	const maxHeight = Math.max(280, Math.floor(viewportHeight - boardTop - viewportBottomGap));
+
+	scheduleBoardEl.style.setProperty("--calendar-max-height", `${maxHeight}px`);
 }
 
 function renderCalendarBlock(event, baseMinutes, pixelsPerMinute, laneHeight, trackPadding, leftAxisInset) {
