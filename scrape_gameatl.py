@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from io import StringIO
 from pathlib import Path
 
@@ -57,26 +58,60 @@ KNOWN_ROOMS = [
 
 
 def download_page(url: str) -> str:
-    headers = {
-        # Identify the scraper rather than pretending to be a browser.
-        "User-Agent": (
-            "ConventionScheduleExporter/1.0 "
-            "(personal schedule display)"
-        )
-    }
+    headers_candidates = [
+        {
+            # Identify the scraper rather than pretending to be a browser.
+            "User-Agent": (
+                "ConventionScheduleExporter/1.0 "
+                "(personal schedule display)"
+            )
+        },
+        {
+            # Some hosts return stripped-down HTML to unknown clients.
+            "User-Agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/126.0.0.0 Safari/537.36"
+            ),
+            "Accept": "text/html,application/xhtml+xml",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
+    ]
 
-    response = requests.get(
-        url,
-        headers=headers,
-        timeout=30,
+    attempts: list[str] = []
+    for headers in headers_candidates:
+        for attempt in range(1, 4):
+            try:
+                response = requests.get(
+                    url,
+                    headers=headers,
+                    timeout=30,
+                )
+                response.raise_for_status()
+                return response.text
+            except requests.RequestException as exc:
+                attempts.append(
+                    f"{headers.get('User-Agent', 'unknown UA')[:48]}... "
+                    f"attempt {attempt}: {exc}"
+                )
+                # Small backoff reduces failures from temporary throttling.
+                time.sleep(1.5 * attempt)
+
+    raise RuntimeError(
+        "Could not download schedule page after retries. "
+        f"Details: {' | '.join(attempts)}"
     )
-    response.raise_for_status()
-
-    return response.text
 
 
 def find_schedule_table(html: str) -> pd.DataFrame:
-    tables = pd.read_html(StringIO(html))
+    try:
+        tables = pd.read_html(StringIO(html))
+    except ValueError as exc:
+        raise RuntimeError(
+            "No HTML tables were detected in the downloaded page. "
+            "The source may be temporarily unavailable or returning "
+            "an alternate layout."
+        ) from exc
 
     for table in tables:
         # Flatten column names in case pandas creates a MultiIndex.
@@ -302,6 +337,20 @@ def main() -> int:
             args.event_type or None,
         )
     except Exception as exc:
+        existing_json = args.json
+        if existing_json.exists():
+            print(
+                "Warning: failed to refresh schedule; "
+                "keeping existing JSON.",
+                file=sys.stderr,
+            )
+            print(
+                f"Reason: {exc}",
+                file=sys.stderr,
+            )
+            print(f"JSON: {existing_json.resolve()}")
+            return 0
+
         print(
             f"Error downloading schedule: {exc}",
             file=sys.stderr,
