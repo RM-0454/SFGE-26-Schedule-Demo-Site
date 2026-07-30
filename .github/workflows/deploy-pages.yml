@@ -14,7 +14,7 @@ on:
       - ".github/workflows/deploy-pages.yml"
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -41,6 +41,22 @@ jobs:
 
       - name: Regenerate schedule JSON
         run: python scrape_gameatl.py
+
+      - name: Verify schedule JSON is non-empty
+        run: |
+          count=$(python -c "import json; data=json.load(open('public/schedule.json')); print(len(data))")
+          echo "Schedule contains $count events."
+          [ "$count" -gt 0 ] || { echo "ERROR: schedule.json is empty after scrape."; exit 1; }
+
+      - name: Commit updated schedule.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet public/schedule.json || (
+            git add public/schedule.json &&
+            git commit -m "chore: refresh schedule data [skip ci]"
+          )
+          git push
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

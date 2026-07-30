@@ -337,20 +337,6 @@ def main() -> int:
             args.event_type or None,
         )
     except Exception as exc:
-        existing_json = args.json
-        if existing_json.exists():
-            print(
-                "Warning: failed to refresh schedule; "
-                "keeping existing JSON.",
-                file=sys.stderr,
-            )
-            print(
-                f"Reason: {exc}",
-                file=sys.stderr,
-            )
-            print(f"JSON: {existing_json.resolve()}")
-            return 0
-
         print(
             f"Error downloading schedule: {exc}",
             file=sys.stderr,
