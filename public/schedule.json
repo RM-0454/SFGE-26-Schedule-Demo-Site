@@ -1118,9 +1118,9 @@
     "Day": "Sat",
     "Start Time": "2pm",
     "Duration": "4 hrs",
-    "Available Seats": 1,
+    "Available Seats": 0,
     "Seat Limit": 6,
-    "Filled Seats": 5,
+    "Filled Seats": 6,
     "Room": "Habersham Ballroom",
     "Area": "Red Meeple 4"
   },
